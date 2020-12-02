@@ -89,7 +89,10 @@ fn main() {
                 (total + 1, old_validity, new_validity)
             });
 
-    println!("Part 1: There are {}/{} valid passwords", num_valid_old, num_pw);
+    println!(
+        "Part 1: There are {}/{} valid passwords",
+        num_valid_old, num_pw
+    );
     println!(
         "Part 2: There are {}/{} valid passwords",
         num_valid_new, num_pw
