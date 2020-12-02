@@ -67,34 +67,28 @@ impl<'a> Password<'a> {
     }
 }
 
+fn get_valid_passwords(input: &str) -> (i32, i32) {
+    input.lines().fold((0, 0), |(valid_old, valid_new), this| {
+        let pw = Password::from_str(this).expect("Invalid password");
+        let old_validity = if pw.is_valid_old() {
+            valid_old + 1
+        } else {
+            valid_old
+        };
+        let new_validity = if pw.is_valid_new() {
+            valid_new + 1
+        } else {
+            valid_new
+        };
+
+        (old_validity, new_validity)
+    })
+}
+
 fn main() {
     let input = include_str!("./input.txt");
-    let (num_pw, num_valid_old, num_valid_new) =
-        input
-            .lines()
-            .fold((0, 0, 0), |(total, valid_old, valid_new), this| {
-                let pw =
-                    Password::from_str(this).expect(&format!("Invalid password: line {}", total));
-                let old_validity = if pw.is_valid_old() {
-                    valid_old + 1
-                } else {
-                    valid_old
-                };
-                let new_validity = if pw.is_valid_new() {
-                    valid_new + 1
-                } else {
-                    valid_new
-                };
+    let (num_valid_old, num_valid_new) = get_valid_passwords(input);
 
-                (total + 1, old_validity, new_validity)
-            });
-
-    println!(
-        "Part 1: There are {}/{} valid passwords",
-        num_valid_old, num_pw
-    );
-    println!(
-        "Part 2: There are {}/{} valid passwords",
-        num_valid_new, num_pw
-    );
+    println!("Part 1: There are {} valid passwords", num_valid_old);
+    println!("Part 2: There are {} valid passwords", num_valid_new);
 }
