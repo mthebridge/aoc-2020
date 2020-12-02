@@ -11,40 +11,43 @@ impl Password {
     fn from_str(line: &str) -> Result<Self, anyhow::Error> {
         let handle_opt_error = |msg| anyhow!("Bad line format: {}", msg);
 
-        let mut x = line.splitn(2, ':');
-        let left = x
+        // Expect the first 4 things split by colon, dash or space.
+        let mut components = line.splitn(4, |c| c == ':' || c == '-' || c == ' ');
+        let min = str::parse(
+            components
+                .next()
+                .ok_or_else(|| handle_opt_error("Empty line"))?
+                .trim(),
+        )?;
+        let max = str::parse(
+            components
+                .next()
+                .ok_or_else(|| handle_opt_error("Not enough components"))?
+                .trim(),
+        )?;
+
+        let letter = components
             .next()
-            .ok_or_else(|| handle_opt_error("Empty line"))?
-            .trim();
-        let password = x.next().ok_or_else(|| handle_opt_error("No colon"))?.trim();
-        // Line has format min-max letter: password
-        let mut x = left.split_whitespace();
-        let counts = x.next().ok_or_else(|| handle_opt_error("Empty line"))?;
-        let letter = x
-            .next()
-            .ok_or_else(|| handle_opt_error("Need a word after colon"))?
+            .ok_or_else(|| handle_opt_error("Not enough components"))?
+            .trim()
             .chars()
             .next()
-            .ok_or_else(|| handle_opt_error("Second word should be a single char"))?;
-        let mut count_vals = counts.splitn(2, '-');
-        let min = count_vals
+            .ok_or_else(|| handle_opt_error("Second word is empty"))?;
+        let password = components
             .next()
-            .ok_or_else(|| handle_opt_error("Counts empty"))
-            .and_then(|s| Ok(str::parse(s)?))?;
-        let max = count_vals
-            .next()
-            .ok_or_else(|| handle_opt_error("Counts not continaing a dash"))
-            .and_then(|s| Ok(str::parse(s)?))?;
+            .ok_or_else(|| handle_opt_error("Not enough components"))?
+            .trim()
+            .to_string();
 
         Ok(Password {
             min,
             max,
             letter,
-            password: password.trim().to_string(),
+            password,
         })
     }
 
-    fn is_valid(&self) -> bool {
+    fn is_valid_old(&self) -> bool {
         let count = self.password.chars().filter(|&c| c == self.letter).count();
         count >= self.min && count <= self.max
     }
@@ -67,13 +70,13 @@ impl Password {
 
 fn main() {
     let input = include_str!("./input.txt");
-    let (num_pw, num_valid, num_valid_new) =
+    let (num_pw, num_valid_old, num_valid_new) =
         input
             .lines()
             .fold((0, 0, 0), |(total, valid_old, valid_new), this| {
                 let pw =
                     Password::from_str(this).expect(&format!("Invalid password: line {}", total));
-                let old_validity = if pw.is_valid() {
+                let old_validity = if pw.is_valid_old() {
                     valid_old + 1
                 } else {
                     valid_old
@@ -87,9 +90,9 @@ fn main() {
                 (total + 1, old_validity, new_validity)
             });
 
-    println!("Part1: There are {}/{} valid passwords", num_valid, num_pw);
+    println!("Part 1: There are {}/{} valid passwords", num_valid_old, num_pw);
     println!(
-        "Part2: There are {}/{} valid passwords",
+        "Part 2: There are {}/{} valid passwords",
         num_valid_new, num_pw
     );
 }

@@ -33,8 +33,8 @@ fn main() {
     let input = include_str!("./input.txt");
     let expenses = parse_input(input);
     let (a, b) = find_pair_with_sum(&expenses, 2020).expect("No valid answers");
-    println!("Answer 1: {} * {} = {}", a, b, a * b);
+    println!("Part 1: {} * {} = {}", a, b, a * b);
 
     let (a, b, c) = find_triple_with_sum(&expenses, 2020).expect("No valid answers");
-    println!("Answer 2: {} * {} * {} = {}", a, b, c, a * b * c);
+    println!("Part 2: {} * {} * {} = {}", a, b, c, a * b * c);
 }
