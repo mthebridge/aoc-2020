@@ -1,14 +1,14 @@
 use anyhow::anyhow;
 
-struct Password {
+struct Password<'a> {
     min: usize,
     max: usize,
     letter: char,
-    password: String,
+    password: &'a str,
 }
 
-impl Password {
-    fn from_str(line: &str) -> Result<Self, anyhow::Error> {
+impl<'a> Password<'a> {
+    fn from_str(line: &'a str) -> Result<Self, anyhow::Error> {
         let handle_opt_error = |msg| anyhow!("Bad line format: {}", msg);
 
         // Expect the first 4 things split by colon, dash or space.
@@ -36,8 +36,7 @@ impl Password {
         let password = components
             .next()
             .ok_or_else(|| handle_opt_error("Not enough components"))?
-            .trim()
-            .to_string();
+            .trim();
 
         Ok(Password {
             min,
