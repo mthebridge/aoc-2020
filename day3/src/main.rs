@@ -42,7 +42,6 @@ impl Map {
             .zip((0..self.height).step_by(y_change))
             .fold(0, |count, this| {
                 if self.trees.contains(&(this.0 % self.width, this.1)) {
-                    println!("Hit tree at ({}, {})", this.0, this.1);
                     count + 1
                 } else {
                     count
@@ -54,8 +53,6 @@ impl Map {
 fn main() {
     let input = include_str!("./input.txt");
     let map = Map::from_str(input).expect("Failed to parse input!");
-    dbg!(&map.height);
-    dbg!(&map.width);
     println!("Part 1: {} trees on path", map.count_trees_on_slope(3, 1));
 }
 
@@ -76,8 +73,6 @@ mod tests {
 #...##....#
 .#..#...#.#"#;
         let map = Map::from_str(input).expect("Failed to parse input!");
-        dbg!(&map.height);
-        dbg!(&map.width);
         let trees = map.count_trees_on_slope(3, 1);
         assert_eq!(trees, 7);
     }
