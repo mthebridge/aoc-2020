@@ -1,6 +1,5 @@
 use std::collections::HashSet;
 
-
 #[derive(Debug, Clone)]
 struct Map {
     width: usize,
@@ -12,16 +11,19 @@ impl Map {
     fn from_str(input: &str) -> Self {
         let lines = input.lines();
 
-        let trees = lines.enumerate().map(|(y, line)| {
-            line.chars().enumerate().filter_map(move |(x, ch)| {
-
-                match ch {
-                    '.' => None,
-                    '#' => Some((x, y)),
-                    _ => panic!("Invalid character {} in input", ch),
-                }
+        let trees = lines
+            .enumerate()
+            .map(|(y, line)| {
+                line.chars()
+                    .enumerate()
+                    .filter_map(move |(x, ch)| match ch {
+                        '.' => None,
+                        '#' => Some((x, y)),
+                        _ => panic!("Invalid character {} in input", ch),
+                    })
             })
-        }).flatten().collect();
+            .flatten()
+            .collect();
 
         let mut lines = input.lines();
         Map {
@@ -33,15 +35,15 @@ impl Map {
 
     fn count_trees_on_slope(&self, x_change: usize, y_change: usize) -> usize {
         (0..)
-        .step_by(x_change)
-        .zip((0..self.height).step_by(y_change))
-        .fold(0, |count, this| {
-            if self.trees.contains(&(this.0 % self.width, this.1)) {
-                count + 1
-            } else {
-                count
-            }
-        })
+            .step_by(x_change)
+            .zip((0..self.height).step_by(y_change))
+            .fold(0, |count, this| {
+                if self.trees.contains(&(this.0 % self.width, this.1)) {
+                    count + 1
+                } else {
+                    count
+                }
+            })
     }
 }
 
