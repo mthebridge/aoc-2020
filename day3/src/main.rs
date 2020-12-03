@@ -22,7 +22,7 @@ impl Map {
                             panic!("Duplicate coordinates?")
                         }
                     }
-                    _ => Err(anyhow::anyhow!("Invalid character {} in input", ch))?,
+                    _ => return Err(anyhow::anyhow!("Invalid character {} in input", ch)),
                 }
                 if height == 0 {
                     width = x + 1
