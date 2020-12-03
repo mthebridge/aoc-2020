@@ -9,32 +9,26 @@ struct Map {
 }
 
 impl Map {
-    fn from_str(input: &str) -> Result<Self, anyhow::Error> {
-        let mut trees = HashSet::new();
-        let mut height = 0;
-        let mut width = 0;
-        for (y, line) in input.lines().enumerate() {
-            for (x, ch) in line.chars().enumerate() {
+    fn from_str(input: &str) -> Self {
+        let lines = input.lines();
+
+        let trees = lines.enumerate().map(|(y, line)| {
+            line.chars().enumerate().filter_map(move |(x, ch)| {
+
                 match ch {
-                    '.' => (),
-                    '#' => {
-                        if !trees.insert((x, y)) {
-                            panic!("Duplicate coordinates?")
-                        }
-                    }
-                    _ => return Err(anyhow::anyhow!("Invalid character {} in input", ch)),
+                    '.' => None,
+                    '#' => Some((x, y)),
+                    _ => panic!("Invalid character {} in input", ch),
                 }
-                if height == 0 {
-                    width = x + 1
-                }
-            }
-            height = y + 1;
-        }
-        Ok(Map {
-            height,
-            width,
+            })
+        }).flatten().collect();
+
+        let mut lines = input.lines();
+        Map {
+            width: lines.next().unwrap().chars().count(),
+            height: lines.count() + 1,
             trees,
-        })
+        }
     }
 
     fn count_trees_on_slope(&self, x_change: usize, y_change: usize) -> usize {
@@ -55,7 +49,7 @@ const ADDITIONAL_SLOPES: [(usize, usize); 4] = [(1, 1), (5, 1), (7, 1), (1, 2)];
 
 fn main() {
     let input = include_str!("./input.txt");
-    let map = Map::from_str(input).expect("Failed to parse input!");
+    let map = Map::from_str(input);
     let part1_treecount = map.count_trees_on_slope(3, 1);
     println!("Part 1: {} trees on path", part1_treecount);
     let part2_product = ADDITIONAL_SLOPES
@@ -82,8 +76,7 @@ mod tests {
 #.##...#...
 #...##....#
 .#..#...#.#"#;
-        let map = Map::from_str(input).expect("Failed to parse input!");
-        let trees = map.count_trees_on_slope(3, 1);
+        let trees = Map::from_str(input).count_trees_on_slope(3, 1);
         assert_eq!(trees, 7);
     }
 }
