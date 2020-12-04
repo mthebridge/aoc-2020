@@ -35,7 +35,7 @@ impl PassportEntry {
     }
     fn valid_part2(&self) -> bool {
         // Check data validation rules
-        self.0.iter().all(|(k, v)| {
+        self.valid_part1() && self.0.iter().all(|(k, v)| {
             match k.as_str() {
                 "byr" => {
                     //4-digit year 1920-2002
@@ -77,11 +77,11 @@ impl PassportEntry {
                     })
                 }
                 "hcl" => {
-                    // #[0-9]{6}
+                    // #[0-9a-f]{6}
                     v.chars().count() == 7 && {
                         let val_clone = v.clone();
                         let mut it = val_clone.chars();
-                        it.next() == Some('#') && it.all(|f| f.is_ascii_hexdigit())
+                        it.next() == Some('#') && it.all(|f| f.is_ascii_digit() || (f.is_lowercase() && f.is_ascii_hexdigit()))
                     }
                 }
                 "ecl" => {
