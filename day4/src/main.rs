@@ -35,79 +35,84 @@ impl PassportEntry {
     }
     fn valid_part2(&self) -> bool {
         // Check data validation rules
-        self.valid_part1() && self.0.iter().all(|(k, v)| {
-            match k.as_str() {
-                "byr" => {
-                    //4-digit year 1920-2002
-                    v.parse::<u16>()
-                        .ok()
-                        .map(|v| v >= 1920 && v <= 2002)
-                        .unwrap_or(false)
-                }
-                "iyr" => {
-                    //4-digit year 2010-2020
-                    v.parse::<u16>()
-                        .ok()
-                        .map(|v| v >= 2010 && v <= 2020)
-                        .unwrap_or(false)
-                }
-                "eyr" => {
-                    // 4-digit year 2020-2030
-                    v.parse::<u16>()
-                        .ok()
-                        .map(|v| v >= 2020 && v <= 2030)
-                        .unwrap_or(false)
-                }
-                "hgt" => {
-                    // 150-193cm OR 59-76in
-                    (v.len() == 4 && {
-                        let (a, b) = v.split_at(2);
-                        b == "in"
-                            && a.parse::<u8>()
-                                .ok()
-                                .map(|v| v >= 59 && v <= 76)
-                                .unwrap_or(false)
-                    }) || (v.len() == 5 && {
-                        let (a, b) = v.split_at(3);
-                        b == "cm"
-                            && a.parse::<u8>()
-                                .ok()
-                                .map(|v| v >= 150 && v <= 193)
-                                .unwrap_or(false)
-                    })
-                }
-                "hcl" => {
-                    // #[0-9a-f]{6}
-                    v.chars().count() == 7 && {
-                        let val_clone = v.clone();
-                        let mut it = val_clone.chars();
-                        it.next() == Some('#') && it.all(|f| f.is_ascii_digit() || (f.is_lowercase() && f.is_ascii_hexdigit()))
+        self.valid_part1()
+            && self.0.iter().all(|(k, v)| {
+                match k.as_str() {
+                    "byr" => {
+                        //4-digit year 1920-2002
+                        v.parse::<u16>()
+                            .ok()
+                            .map(|v| v >= 1920 && v <= 2002)
+                            .unwrap_or(false)
+                    }
+                    "iyr" => {
+                        //4-digit year 2010-2020
+                        v.parse::<u16>()
+                            .ok()
+                            .map(|v| v >= 2010 && v <= 2020)
+                            .unwrap_or(false)
+                    }
+                    "eyr" => {
+                        // 4-digit year 2020-2030
+                        v.parse::<u16>()
+                            .ok()
+                            .map(|v| v >= 2020 && v <= 2030)
+                            .unwrap_or(false)
+                    }
+                    "hgt" => {
+                        // 150-193cm OR 59-76in
+                        (v.len() == 4 && {
+                            let (a, b) = v.split_at(2);
+                            b == "in"
+                                && a.parse::<u8>()
+                                    .ok()
+                                    .map(|v| v >= 59 && v <= 76)
+                                    .unwrap_or(false)
+                        }) || (v.len() == 5 && {
+                            let (a, b) = v.split_at(3);
+                            b == "cm"
+                                && a.parse::<u8>()
+                                    .ok()
+                                    .map(|v| v >= 150 && v <= 193)
+                                    .unwrap_or(false)
+                        })
+                    }
+                    "hcl" => {
+                        // #[0-9a-f]{6}
+                        v.chars().count() == 7 && {
+                            let val_clone = v.clone();
+                            let mut it = val_clone.chars();
+                            it.next() == Some('#')
+                                && it.all(|f| {
+                                    f.is_ascii_digit()
+                                        || (f.is_lowercase() && f.is_ascii_hexdigit())
+                                })
+                        }
+                    }
+                    "ecl" => {
+                        // One of: amb blu brn gry grn hzl oth
+                        v == "amb"
+                            || v == "blu"
+                            || v == "brn"
+                            || v == "gry"
+                            || v == "grn"
+                            || v == "hzl"
+                            || v == "oth"
+                    }
+                    "pid" => {
+                        // Nine digits (may be leading 0)
+                        v.chars().all(|f| f.is_ascii_digit()) && v.chars().count() == 9
+                    }
+                    "cid" => {
+                        // Always valid
+                        true
+                    }
+                    _ => {
+                        // Unknown field
+                        false
                     }
                 }
-                "ecl" => {
-                    // One of: amb blu brn gry grn hzl oth
-                    v == "amb"
-                        || v == "blu"
-                        || v == "brn"
-                        || v == "gry"
-                        || v == "grn"
-                        || v == "hzl"
-                        || v == "oth"
-                }
-                "pid" => {
-                    // Nine digits (may be leading 0)
-                    v.chars().all(|f| f.is_ascii_digit()) && v.chars().count() == 9
-                }
-                "cid" => {
-                    // Always valid
-                    true
-                }
-                _ => {
-                    // Unknown field
-                    false
-                }
-            }
-        })
+            })
     }
 }
 
