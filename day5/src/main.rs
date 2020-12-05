@@ -54,9 +54,11 @@ fn main() {
     // where the previous entry is not one lower.
     // That entry in the seat_ids vector is one higher than the missing ID.
     seat_ids.sort_unstable();
-    let mut candidates = (1..seat_ids.len())
+    let mut candidate_indices = (1..seat_ids.len())
         .filter(|&idx| seat_ids[idx] >= 8 && seat_ids[idx - 1] != seat_ids[idx] - 1);
-    let my_seat = seat_ids[candidates.next().expect("No missing seat")] - 1;
-    assert!(candidates.next().is_none());
+    let next_seat_idx = candidate_indices.next().expect("No missing seat");
+    // Sanity check there was only one free seat...
+    assert!(candidate_indices.next().is_none());
+    let my_seat = seat_ids[next_seat_idx] - 1;
     println!("Part 2: Missing Seat ID: {}", my_seat);
 }
