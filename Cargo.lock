@@ -7,7 +7,45 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf8dcb5b4bbaa28653b647d8c77bd4ed40183b48882e130c1f1ffb73de069fd7"
 
 [[package]]
-name = "day1"
+name = "day01"
+version = "0.1.0"
+
+[[package]]
+name = "day02"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+]
+
+[[package]]
+name = "day03"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+]
+
+[[package]]
+name = "day04"
+version = "0.1.0"
+
+[[package]]
+name = "day05"
+version = "0.1.0"
+
+[[package]]
+name = "day06"
+version = "0.1.0"
+
+[[package]]
+name = "day07"
+version = "0.1.0"
+
+[[package]]
+name = "day08"
+version = "0.1.0"
+
+[[package]]
+name = "day09"
 version = "0.1.0"
 
 [[package]]
@@ -51,13 +89,6 @@ name = "day19"
 version = "0.1.0"
 
 [[package]]
-name = "day2"
-version = "0.1.0"
-dependencies = [
- "anyhow",
-]
-
-[[package]]
 name = "day20"
 version = "0.1.0"
 
@@ -79,35 +110,4 @@ version = "0.1.0"
 
 [[package]]
 name = "day25"
-version = "0.1.0"
-
-[[package]]
-name = "day3"
-version = "0.1.0"
-dependencies = [
- "anyhow",
-]
-
-[[package]]
-name = "day4"
-version = "0.1.0"
-
-[[package]]
-name = "day5"
-version = "0.1.0"
-
-[[package]]
-name = "day6"
-version = "0.1.0"
-
-[[package]]
-name = "day7"
-version = "0.1.0"
-
-[[package]]
-name = "day8"
-version = "0.1.0"
-
-[[package]]
-name = "day9"
 version = "0.1.0"

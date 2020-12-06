@@ -1,10 +1,11 @@
 [package]
-name = "day5"
+name = "day02"
 version = "0.1.0"
-authors = ["Mark Thebridge <mark.thebridge@gmail.com>"]
+authors = ["Mark Thebridge <mark.thebridge@metaswitch.com>"]
 edition = "2018"
 publish = ["metaswitch"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+anyhow = "1.0.34"
