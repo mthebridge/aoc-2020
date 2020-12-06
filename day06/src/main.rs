@@ -6,8 +6,7 @@ fn get_all_answers(group_data: &str) -> HashSet<char> {
 }
 
 fn count_answers_from_all(group_data: &str) -> usize {
-    let answers = get_all_answers(group_data);
-    answers
+    get_all_answers(group_data)
         .iter()
         .filter(|&&c| group_data.lines().all(|l| l.contains(c)))
         .count()
