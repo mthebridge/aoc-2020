@@ -1,5 +1,9 @@
 use std::convert::TryFrom;
 
+// This struct is really unnecessary - we only ever use it to map straight
+// to a seat ID, which we could do with two local vars.
+//
+// But it makes the code marginally cleaner.
 #[derive(Debug, Clone, Eq, PartialEq)]
 struct BoardingPass {
     row: u8,

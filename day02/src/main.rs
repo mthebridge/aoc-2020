@@ -1,4 +1,4 @@
-use anyhow::anyhow;
+use std::{fmt, num::ParseIntError};
 
 struct Password<'a> {
     min: usize,
@@ -7,9 +7,26 @@ struct Password<'a> {
     password: &'a str,
 }
 
+#[derive(Debug)]
+struct ParseError(pub String);
+
+impl fmt::Display for ParseError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Failed to parse input: {}", self.0)
+    }
+}
+
+impl std::error::Error for ParseError {}
+
+impl std::convert::From<ParseIntError> for ParseError {
+    fn from(e: ParseIntError) -> Self {
+        ParseError(e.to_string())
+    }
+}
+
 impl<'a> Password<'a> {
-    fn from_str(line: &'a str) -> Result<Self, anyhow::Error> {
-        let handle_opt_error = |msg| anyhow!("Bad line format: {}", msg);
+    fn from_str(line: &'a str) -> Result<Self, ParseError> {
+        let handle_opt_error = |msg| ParseError(format!("Bad line format: {}", msg));
 
         // Expect the first 4 things split by colon, dash or space.
         let mut components = line.splitn(4, |c| c == ':' || c == '-' || c == ' ');
