@@ -18,7 +18,7 @@ impl BoardingPass {
         //  - map the letters to 1/0 for an iterator of binary digits;
         //  - reverse the iterator so we start at the units end;
         // -  fold the iterator, adding increasing powers of two at each stage.
-        let bin_parser = |s: &str, lower: char, upper: char| -> u8 {
+        let parse = |s: &str, lower: char, upper: char| -> u8 {
             s.chars()
                 .map(|c| match c {
                     x if x == lower => 0,
@@ -33,8 +33,8 @@ impl BoardingPass {
         };
 
         BoardingPass {
-            row: bin_parser(rows, 'F', 'B'),
-            seat: bin_parser(seat, 'L', 'R'),
+            row: parse(rows, 'F', 'B'),
+            seat: parse(seat, 'L', 'R'),
         }
     }
 
