@@ -1,13 +1,15 @@
 use std::collections::HashSet;
 
-// Gets all questions to which someone answerre "yes"
+// Gets all questions to which someone answered "yes"
 fn get_all_answers(group_data: &str) -> HashSet<char> {
     group_data.replace("\n", "").chars().collect::<HashSet<_>>()
 }
 
+// Count the questions to which *all* members of the group answered "yes"
 fn count_answers_from_all(group_data: &str) -> usize {
     get_all_answers(group_data)
         .iter()
+        // We want to count this answer only if it appears in *all* lines.
         .filter(|&&c| group_data.lines().all(|l| l.contains(c)))
         .count()
 }
