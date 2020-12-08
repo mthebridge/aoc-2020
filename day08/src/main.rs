@@ -23,26 +23,38 @@ fn parse_line(line: &str) -> Instruction {
     }
 }
 
-fn run_until_loop(instructions: &[Instruction]) -> i32 {
+fn run_until_loop(instructions: &[Instruction], patch_idx: Option<usize>) -> (bool, i32) {
     let mut acc = 0;
     let mut idx = 0;
     let mut seen = HashSet::new();
+
     loop {
+        // If we're about to look off the end of the instructions, return success.
+        if idx >= instructions.len() {
+            return (true, acc);
+        }
+        // We've been here before - end infinite loop
         if !seen.insert(idx) {
-            return acc;
+            return (false, acc);
         }
         match instructions[idx] {
-            Instruction::Nop(_) => idx += 1,
             Instruction::Jump(arg) => {
-                if arg > 0 {
-                    idx += arg as usize
+                if Some(idx) == patch_idx {
+                    idx += 1
                 } else {
-                    idx -= (-arg) as usize
+                    idx = idx.wrapping_add(arg as usize);
                 }
             }
             Instruction::Acc(arg) => {
                 acc += arg;
                 idx += 1
+            }
+            Instruction::Nop(arg) => {
+                if Some(idx) == patch_idx {
+                    idx = idx.wrapping_add(arg as usize);
+                } else {
+                    idx += 1
+                }
             }
         }
     }
@@ -52,9 +64,16 @@ fn main() {
     let input = include_str!("./input.txt");
 
     let instructions = input.lines().map(parse_line).collect::<Vec<_>>();
-    println!(
-        "Part 1: Acc is {} after repeat",
-        run_until_loop(&instructions)
-    );
-    println!("Part 2");
+    let (terminated, acc) = run_until_loop(&instructions, None);
+    assert!(!terminated);
+    println!("Part 1: Acc is {} after repeat", acc);
+
+    for idx in 0..instructions.len() {
+        // Try changing each index
+        let (terminated, acc) = run_until_loop(&instructions, Some(idx));
+        if terminated {
+            println!("Part 2: Acc is {} after changing instruction {}", acc, idx);
+            break;
+        }
+    }
 }
