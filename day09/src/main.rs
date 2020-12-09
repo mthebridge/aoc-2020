@@ -22,7 +22,7 @@ fn find_sequence_summing_to(nums: &[u64], target: u64) -> &[u64] {
     // So:
     // * Start at the beginning
     // * Try adding on each number sequentially.
-    //
+    // * If we go over, subtract the first number.
     let mut sum = 0;
     let mut start_idx = 0;
     let mut end_idx = 0;
