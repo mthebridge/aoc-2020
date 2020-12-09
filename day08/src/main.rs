@@ -1,9 +1,9 @@
 use std::collections::HashSet;
 
 enum Instruction {
-    Nop(i32),
-    Acc(i32),
-    Jump(i32),
+    Nop(i16),
+    Acc(i16),
+    Jump(i16),
 }
 
 fn parse_line(line: &str) -> Instruction {
