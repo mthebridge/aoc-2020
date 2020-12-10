@@ -46,7 +46,7 @@ fn run_until_loop(instructions: &[Instruction], patch_idx: Option<usize>) -> (bo
                 }
             }
             Instruction::Acc(arg) => {
-                acc += arg;
+                acc += i32::from(arg);
                 idx += 1
             }
             Instruction::Nop(arg) => {
