@@ -25,17 +25,19 @@ fn main() {
     );
 
     // For [aprt2: find the first time]
-    let mut part2_buses = buses.clone().
-    enumerate().filter_map(|(idx, bus)| {
-        if let Some(b) = bus {
-            println!("Must be {} modulo {}", idx, b);
-            Some((idx, b))
-        } else {
-            None
-        }
-    }).collect::<Vec<_>>();
+    let mut part2_buses = buses
+        .clone()
+        .enumerate()
+        .filter_map(|(idx, bus)| {
+            if let Some(b) = bus {
+                println!("Must be {} modulo {}", idx, b);
+                Some((idx, b))
+            } else {
+                None
+            }
+        })
+        .collect::<Vec<_>>();
     part2_buses.sort_unstable_by_key(|&k| k.0);
-
 
     // // Need to find the first value that appears in each
     // // Let candidates
@@ -46,16 +48,11 @@ fn main() {
     //             for v in (idx..).step_by(val) {
     //                 // This value satisfies the current constraint.  Recurse.
 
-
-
     //             }
     //         }
     //     }
 
-
     // }
-
-
 
     // println!("Part 2; {}", part2_buses.iter().next().unwrap());
 }
