@@ -34,20 +34,28 @@ fn main() {
             None
         }
     }).collect::<Vec<_>>();
-    part2_buses.sort_unstable_by_key(|&k| k.1);
-
-    type Candidate = Box<dyn Iterator<Item=usize>>;
-    let mut candidates: Option<Candidate> = None;
-    for r in part2_buses.rev() {
-        if let Some(existing) = candidates {
-            Some(Box::new(existing.filter(|c| r.(c).is_some()))as Candidate)
-        } else {
-            Some(Box::new(r.map(|(_, v)|)) as Candidate)
-        }
-    }
-
-    // Need to find the first value that appears in each
+    part2_buses.sort_unstable_by_key(|&k| k.0);
 
 
-    println!("Part 2; {}", candidates.unwrap().next().unwrap());
+    // // Need to find the first value that appears in each
+    // // Let candidates
+    // while let next = part2_buses.pop() {
+    //     match next {
+    //         None => return ,
+    //         Some((idx, val)) => {
+    //             for v in (idx..).step_by(val) {
+    //                 // This value satisfies the current constraint.  Recurse.
+
+
+
+    //             }
+    //         }
+    //     }
+
+
+    // }
+
+
+
+    // println!("Part 2; {}", part2_buses.iter().next().unwrap());
 }
