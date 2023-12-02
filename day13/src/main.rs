@@ -98,8 +98,6 @@ fn main() {
         my_bus * my_wait_time
     );
 
-    // For part2: find the first time]
-
     let answer = find_gold_star(buses.clone());
     println!("Part 2; {}", answer);
 }
